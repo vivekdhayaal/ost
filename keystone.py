@@ -1,11 +1,13 @@
 from keystoneclient.v3 import client
 
+import numpy as np
+
 import datetime
 
 USERNAME='admin'
 PASSWORD='nova'
 PROJECT_NAME='admin'
-KEYSTONE_URL='http://10.0.2.15:5000/v3'
+KEYSTONE_URL='http://172.31.25.98:5000/v3'
 USER_DOMAIN_NAME='Default'
 PROJECT_DOMAIN_NAME='Default'
 
@@ -15,13 +17,12 @@ ks = client.Client(username=USERNAME, password=PASSWORD, project_name=PROJECT_NA
 
 resp_times = []
 
-for i in range(1000):
+for i in range(100):
     start = datetime.datetime.utcnow()
     ks.users.list()
     end = datetime.datetime.utcnow()
     resp_times.append((end-start).total_seconds())
 
 
-print resp_times
-#for i in resp_times:
-#    print i
+print 'Average:', sum(resp_times)/len(resp_times)
+print '95th %:', np.percentile(resp_times, 95)
