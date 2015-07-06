@@ -1,0 +1,2 @@
+# Only tested on ubuntu trusty
+python-dev
