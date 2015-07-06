@@ -11,8 +11,10 @@ KEYSTONE_URL='http://172.31.25.98:5000/v3'
 USER_DOMAIN_NAME='Default'
 PROJECT_DOMAIN_NAME='Default'
 
-ks = client.Client(username=USERNAME, password=PASSWORD, project_name=PROJECT_NAME,
-        project_domain_name=PROJECT_DOMAIN_NAME, user_domain_name=USER_DOMAIN_NAME,
+ks = client.Client(username=USERNAME, password=PASSWORD,
+        project_name=PROJECT_NAME,
+        project_domain_name=PROJECT_DOMAIN_NAME,
+        user_domain_name=USER_DOMAIN_NAME,
         auth_url=KEYSTONE_URL)
 
 resp_times = []
