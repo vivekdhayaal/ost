@@ -10,6 +10,7 @@ PROJECT_NAME='admin'
 KEYSTONE_URL='http://172.31.25.98:5000/v3'
 USER_DOMAIN_NAME='Default'
 PROJECT_DOMAIN_NAME='Default'
+ITERATIONS=300
 
 ks = client.Client(username=USERNAME, password=PASSWORD,
         project_name=PROJECT_NAME,
@@ -17,27 +18,29 @@ ks = client.Client(username=USERNAME, password=PASSWORD,
         user_domain_name=USER_DOMAIN_NAME,
         auth_url=KEYSTONE_URL)
 
-resp_times = []
+def get_response_times(method, *args):
+    resp_times = []
 
-for i in range(100):
-    start = datetime.datetime.utcnow()
-    ks.users.list()
-    end = datetime.datetime.utcnow()
-    #print (end-start).total_seconds()
-    resp_times.append((end-start).total_seconds())
+    for i in range(ITERATIONS+100):
+        # Let us warm up a little
+        if i < 100:
+            method(*args)
+            continue
 
-print 'Average:', sum(resp_times)/len(resp_times)
-print '95th %:', np.percentile(resp_times, 95)
+        start = datetime.datetime.utcnow()
+        method(*args)
+        end = datetime.datetime.utcnow()
+        resp_times.append((end-start).total_seconds())
 
-resp_times=[]
+    avg = sum(resp_times)/len(resp_times)*1000
+    p95 = np.percentile(resp_times, 95)*1000
+    p99 = np.percentile(resp_times, 99)*1000
+    del(resp_times) # Required really?
+    return (avg, p95, p99)
 
-for i in range(100):
-    start = datetime.datetime.utcnow()
-    ks.users.get('cf1f87101f8d4e8a92dc8a5a7cfa319e')
-    end = datetime.datetime.utcnow()
-    #print (end-start).total_seconds()
-    resp_times.append((end-start).total_seconds())
+# List a user
+user_name = ks.users.list()[0].id
+print get_response_times(ks.users.get, user_name)
 
-
-print 'Average:', sum(resp_times)/len(resp_times)
-print '95th %:', np.percentile(resp_times, 95)
+# List users
+print get_response_times(ks.users.list)
