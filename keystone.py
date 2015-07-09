@@ -38,9 +38,9 @@ def get_response_times(method, *args):
     del(resp_times) # Required really?
     return (avg, p95, p99)
 
-# List a user
+print('List a user')
 user_name = ks.users.list()[0].id
-print get_response_times(ks.users.get, user_name)
+#print get_response_times(ks.users.get, user_name)
 
-# List users
-print get_response_times(ks.users.list)
+print('List all user')
+#print get_response_times(ks.users.list)
