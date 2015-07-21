@@ -33,14 +33,13 @@ def get_response_times(method, *args):
         resp_times.append((end-start).total_seconds())
 
     avg = sum(resp_times)/len(resp_times)*1000
-    p95 = np.percentile(resp_times, 95)*1000
     p99 = np.percentile(resp_times, 99)*1000
     del(resp_times) # Required really?
-    return (avg, p95, p99)
+    return (avg, p99)
 
 print('List a user')
 user_name = ks.users.list()[0].id
 print get_response_times(ks.users.get, user_name)
 
-print('List all user')
+print('List all users')
 print get_response_times(ks.users.list)
