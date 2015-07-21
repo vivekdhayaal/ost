@@ -7,10 +7,10 @@ import datetime
 USERNAME='admin'
 PASSWORD='nova'
 PROJECT_NAME='admin'
-KEYSTONE_URL='http://172.31.25.98:5000/v3'
+KEYSTONE_URL='http://172.31.25.80:5000/v3'
 USER_DOMAIN_NAME='Default'
 PROJECT_DOMAIN_NAME='Default'
-ITERATIONS=300
+ITERATIONS=100
 
 ks = client.Client(username=USERNAME, password=PASSWORD,
         project_name=PROJECT_NAME,
@@ -40,7 +40,7 @@ def get_response_times(method, *args):
 
 print('List a user')
 user_name = ks.users.list()[0].id
-#print get_response_times(ks.users.get, user_name)
+print get_response_times(ks.users.get, user_name)
 
 print('List all user')
-#print get_response_times(ks.users.list)
+print get_response_times(ks.users.list)
